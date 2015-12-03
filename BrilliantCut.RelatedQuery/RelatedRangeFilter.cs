@@ -8,37 +8,37 @@ using EPiServer.Find.Api.Querying.Filters;
 namespace BrilliantCut.RelatedQuery
 {
     /// <summary>
-    /// 
+    /// A filter, which will perform get the min and max value from the content, and make a range filtering for the property between the min and max value.
     /// </summary>
-    public class RangeFilter<TQuery, TValue> : RelatedFilterBase<TQuery, TValue>
+    public class RelatedRangeFilter<TQuery, TValue> : RelatedFilterBase<TQuery, TValue>
     {
         /// <summary>
-        /// 
+        /// Creates an instance of the class.
         /// </summary>
         /// <param name="client"></param>
-        public RangeFilter(IClient client)
+        public RelatedRangeFilter(IClient client)
             : base(client)
         {
         }
 
         /// <summary>
-        /// 
+        /// Creates a filter, which will perform get the min and max value from the content, and make a range filtering for the property between the min and max value.
         /// </summary>
-        /// <param name="instances"></param>
+        /// <param name="content"></param>
         /// <returns></returns>
-        public override Filter CreateRelatedFilter(IEnumerable<TQuery> instances)
+        public override Filter CreateRelatedFilter(IEnumerable<TQuery> content)
         {
-            var values = instances.Select(instance => CompiledProperty(instance)).ToArray();
+            var values = content.Select(instance => CompiledProperty(instance)).ToArray();
             return CreateRangeFilter(GetFieldName(), values);
         }
 
         /// <summary>
-        /// 
+        /// Creates a filter, which will perform get the min and max value from the content, and make a range filtering for the property between the min and max value.
         /// </summary>
-        /// <param name="fieldName"></param>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        protected virtual Filter CreateRangeFilter(string fieldName, TValue[] values)
+        /// <param name="property">The property to use.</param>
+        /// <param name="values">The values to use when creating the query.</param>
+        /// <returns>The range filter.</returns>
+        protected virtual Filter CreateRangeFilter(string property, TValue[] values)
         {
             if (!values.Any())
             {
@@ -52,7 +52,7 @@ namespace BrilliantCut.RelatedQuery
                 var min = Convert.ToInt32(values.Min());
                 var max = Convert.ToInt32(values.Max());
 
-                return RangeFilter.Create(fieldName, min, max);
+                return RangeFilter.Create(property, min, max);
             }
 
             if (firstValue is double)
@@ -60,7 +60,7 @@ namespace BrilliantCut.RelatedQuery
                 var min = Convert.ToDouble(values.Min());
                 var max = Convert.ToDouble(values.Max());
 
-                return RangeFilter.Create(fieldName, min, max);
+                return RangeFilter.Create(property, min, max);
             }
 
             if (firstValue is decimal)
@@ -68,7 +68,7 @@ namespace BrilliantCut.RelatedQuery
                 var min = Convert.ToDecimal(values.Min());
                 var max = Convert.ToDecimal(values.Max());
 
-                return RangeFilter.Create(fieldName, min, max);
+                return RangeFilter.Create(property, min, max);
             }
 
             if (firstValue is DateTime)
@@ -76,7 +76,7 @@ namespace BrilliantCut.RelatedQuery
                 var min = Convert.ToDateTime(values.Min());
                 var max = Convert.ToDateTime(values.Max());
 
-                return RangeFilter.Create(fieldName, min, max);
+                return RangeFilter.Create(property, min, max);
             }
 
             throw new NotSupportedException();

@@ -7,30 +7,30 @@ using EPiServer.Find.Api.Querying.Filters;
 namespace BrilliantCut.RelatedQuery
 {
     /// <summary>
-    /// 
+    /// A filter, which will match content against the property for an exact match.
     /// </summary>
     /// <typeparam name="TQuery"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class MatchFilter<TQuery, TValue> : RelatedFilterBase<TQuery, TValue>
+    public class RelatedMatchFilter<TQuery, TValue> : RelatedFilterBase<TQuery, TValue>
     {
         /// <summary>
-        /// 
+        /// Creates an instance of the class.
         /// </summary>
-        /// <param name="client"></param>
-        public MatchFilter(IClient client)
+        /// <param name="client">The Episerver Find client.</param>
+        public RelatedMatchFilter(IClient client)
             : base(client)
         {
         }
         /// <summary>
-        /// 
+        /// Creates a filter, which will match content against the property for an exact match.
         /// </summary>
-        /// <param name="instances"></param>
-        /// <returns></returns>
-        public override Filter CreateRelatedFilter(IEnumerable<TQuery> instances)
+        /// <param name="content">The content to use when creating the query.</param>
+        /// <returns>Match filter.</returns>
+        public override Filter CreateRelatedFilter(IEnumerable<TQuery> content)
         {
             var filterBuilder = new FilterBuilder<TQuery>(Client);
 
-            return instances
+            return content
                 .Select(instance => CompiledProperty(instance)).Distinct()
                 .Aggregate(filterBuilder, (current, valueToMatch) => 
                     current.Or(x => 
