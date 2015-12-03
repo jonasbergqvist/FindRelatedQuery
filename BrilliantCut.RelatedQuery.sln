@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrilliantCut.RelatedQuery", "BrilliantCut.RelatedQuery\BrilliantCut.RelatedQuery.csproj", "{8DEA8428-377E-403E-87B9-B3CCF49B69CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DEA8428-377E-403E-87B9-B3CCF49B69CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DEA8428-377E-403E-87B9-B3CCF49B69CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DEA8428-377E-403E-87B9-B3CCF49B69CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DEA8428-377E-403E-87B9-B3CCF49B69CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

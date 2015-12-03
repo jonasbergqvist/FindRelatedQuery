@@ -327,3 +327,5 @@
 /packages/structuremap.web-signed.3.1.6.186/lib/net40/StructureMap.Web.dll
 /packages/structuremap.web-signed.3.1.6.186/lib/net40/StructureMap.Web.pdb
 /packages/structuremap.web-signed.3.1.6.186/structuremap.web-signed.3.1.6.186.nupkg
+/BrilliantCut.RelatedQuery/bin
+/BrilliantCut.RelatedQuery/obj
