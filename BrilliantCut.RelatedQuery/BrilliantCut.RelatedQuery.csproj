@@ -193,13 +193,16 @@
   <ItemGroup>
     <Compile Include="Extensions\SearchExtensions.cs" />
     <Compile Include="IRelatedFilter.cs" />
+    <Compile Include="IRelatedQuery.cs" />
+    <Compile Include="RelatedFilterRegistration.cs" />
     <Compile Include="RelatedMatchFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelatedQueryInitializationModule.cs" />
     <Compile Include="RelatedRangeFilter.cs" />
     <Compile Include="RelatedFilterBase.cs" />
     <Compile Include="RelatedFilterData.cs" />
     <Compile Include="RelatedFilterRegistry.cs" />
-    <Compile Include="RelatedItemQueryFactory.cs" />
+    <Compile Include="RelatedQueryFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1,82 +1,73 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Linq;
+using EPiServer.Framework.TypeScanner;
 using EPiServer.ServiceLocation;
 
 namespace BrilliantCut.RelatedQuery
 {
+    
     /// <summary>
     /// Register for the filters that will be used when creating a related query.
     /// </summary>
     [ServiceConfiguration(Lifecycle = ServiceInstanceScope.Singleton)]
     public class RelatedFilterRegistry
     {
+        private readonly ITypeScannerLookup _typeScannerLookup;
         private readonly IServiceLocator _serviceLocator;
-        private readonly List<IRelatedFilter<object>> _relatedFilters;
+        private readonly ConcurrentDictionary<Type, List<IRelatedFilter<object>>> _relatedFilters;
 
         /// <summary>
         /// Creates an instance of the class.
         /// </summary>
-        public RelatedFilterRegistry(IServiceLocator serviceLocator)
+        public RelatedFilterRegistry(IServiceLocator serviceLocator, ITypeScannerLookup typeScannerLookup)
         {
             _serviceLocator = serviceLocator;
-            _relatedFilters = new List<IRelatedFilter<object>>();
+            _typeScannerLookup = typeScannerLookup;
+            _relatedFilters = new ConcurrentDictionary<Type, List<IRelatedFilter<object>>>();
         }
 
-        /// <summary>
-        /// Adds a filter to the registry.
-        /// </summary>
-        /// <param name="filter">The filter to add.</param>
-        /// <returns></returns>
-        public RelatedFilterRegistry AddFilter(IRelatedFilter<object> filter)
+        internal void RegisterRelatedQueries()
         {
-            _relatedFilters.Add(filter);
-            return this;
+            var relatedQueryTypes = _typeScannerLookup.AllTypes
+                .Where(t => !t.IsAbstract && typeof(IRelatedQuery).IsAssignableFrom(t));
+
+            foreach (var relatedQueryType in relatedQueryTypes)
+            {
+                var relatedQuery = _serviceLocator.GetInstance(relatedQueryType) as IRelatedQuery;
+                if (relatedQuery == null)
+                {
+                    continue;
+                }
+
+                relatedQuery.RegistryQuery(new RelatedFilterRegistration(relatedQueryType, _relatedFilters, _serviceLocator));
+            }
         }
 
         /// <summary>
-        /// Adds a filter, which will match content against the property for an exact match.
-        /// </summary>
-        /// <param name="property">The property to use</param>
-        /// <param name="boost">The importance of the filter. Higher boost makes the filter more important.</param>
-        /// <returns>The match filter.</returns>
-        public RelatedFilterRegistry AddMatchFilter<TQuery, TValue>(Expression<Func<TQuery, TValue>> property, double boost)
-        {
-            var filter = _serviceLocator.GetInstance<RelatedMatchFilter<TQuery, TValue>>();
-            SetProperties(filter, property, boost);
-
-            _relatedFilters.Add((IRelatedFilter<object>)filter);
-            return this;
-        }
-
-        /// <summary>
-        /// Adds a filter, which will perform get the min and max value from the content, and make a range filtering for the property between the min and max value.
-        /// </summary>
-        /// <param name="property">The property to use</param>
-        /// <param name="boost">The importance of the filter. Higher boost makes the filter more important.</param>
-        /// <returns>The range filter.</returns>
-        public RelatedFilterRegistry AddRangeFilter<TQuery, TValue>(Expression<Func<TQuery, TValue>> property, double boost)
-        {
-            var filter = _serviceLocator.GetInstance<RelatedRangeFilter<TQuery, TValue>>();
-            SetProperties(filter, property, boost);
-
-            _relatedFilters.Add((IRelatedFilter<object>)filter);
-            return this;
-        }
-
-        /// <summary>
-        /// Gets all related filters that has been registered.
+        /// Gets related filters that has been registered for a specific type.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IRelatedFilter<object>> List()
+        public IEnumerable<IRelatedFilter<object>> List<TRelatedQuery>()
+            where TRelatedQuery : IRelatedQuery
+        {
+            var type = typeof (TRelatedQuery);
+            if (!_relatedFilters.ContainsKey(type))
+            {
+                return Enumerable.Empty<IRelatedFilter<object>>();
+            }
+
+            return _relatedFilters[type];
+        }
+
+        /// <summary>
+        /// Gets related filters that has been registered.
+        /// </summary>
+        /// <returns></returns>
+        public ConcurrentDictionary<Type, List<IRelatedFilter<object>>> List()
         {
             return _relatedFilters;
-        }
-
-        private static void SetProperties<TQuery, TValue>(RelatedFilterBase<TQuery, TValue> filter, Expression<Func<TQuery, TValue>> property, double boost)
-        {
-            filter.Property = property;
-            filter.Boost = boost;
         }
     }
 }
