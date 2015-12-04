@@ -129,7 +129,7 @@ namespace BrilliantCut.RelatedQuery
                 return freeTextSearch;
             }
 
-            return CreateFilterQuery(boostedQuery, contentArray);
+            return CreateFilterQuery<TRelatedQuery, TQuery>(boostedQuery, contentArray);
         }
 
         /// <summary>
@@ -198,12 +198,14 @@ namespace BrilliantCut.RelatedQuery
         /// Creates a filter query based on a boost query.
         /// </summary>
         /// <typeparam name="TQuery">The search type.</typeparam>
+        /// <typeparam name="TRelatedQuery">The related query type</typeparam>
         /// <param name="boostQuery">The boost query</param>
         /// <param name="contentArray">The content to use when creating the query.</param>
         /// <returns>Filter query.</returns>
-        protected virtual ITypeSearch<TQuery> CreateFilterQuery<TQuery>(
+        protected virtual ITypeSearch<TQuery> CreateFilterQuery<TRelatedQuery, TQuery>(
             IQueriedSearch<TQuery, CustomFiltersScoreQuery> boostQuery,
             object[] contentArray)
+            where TRelatedQuery : IRelatedQuery
             where TQuery : class
         {
             var distinctTypes = contentArray
