@@ -11,6 +11,6 @@ namespace BrilliantCut.RelatedQuery
         /// </summary>
         /// <param name="relatedFilterRegistration">The related filter registration</param>
         /// <returns></returns>
-        RelatedFilterRegistration RegistryQuery(RelatedFilterRegistration relatedFilterRegistration);
+        RelatedQueryRegistration RegistryQuery(RelatedQueryRegistration relatedFilterRegistration);
     }
 }

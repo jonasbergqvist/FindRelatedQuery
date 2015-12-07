@@ -7,7 +7,6 @@ using EPiServer.ServiceLocation;
 
 namespace BrilliantCut.RelatedQuery
 {
-    
     /// <summary>
     /// Register for the filters that will be used when creating a related query.
     /// </summary>
@@ -16,7 +15,9 @@ namespace BrilliantCut.RelatedQuery
     {
         private readonly ITypeScannerLookup _typeScannerLookup;
         private readonly IServiceLocator _serviceLocator;
-        private readonly ConcurrentDictionary<Type, List<IRelatedFilter<object>>> _relatedFilters;
+        private readonly ConcurrentDictionary<Type, RelatedQueryData> _relatedFilters;
+        private readonly ConcurrentDictionary<Type, IModifyFilterQuery> _filterQueryModifications;
+        private readonly ConcurrentDictionary<Type, IModifySearchQuery> _searchQueryModifications;
 
         /// <summary>
         /// Creates an instance of the class.
@@ -25,7 +26,9 @@ namespace BrilliantCut.RelatedQuery
         {
             _serviceLocator = serviceLocator;
             _typeScannerLookup = typeScannerLookup;
-            _relatedFilters = new ConcurrentDictionary<Type, List<IRelatedFilter<object>>>();
+            _relatedFilters = new ConcurrentDictionary<Type, RelatedQueryData>();
+            _filterQueryModifications = new ConcurrentDictionary<Type, IModifyFilterQuery>();
+            _searchQueryModifications = new ConcurrentDictionary<Type, IModifySearchQuery>();
         }
 
         internal void RegisterRelatedQueries()
@@ -41,7 +44,7 @@ namespace BrilliantCut.RelatedQuery
                     continue;
                 }
 
-                relatedQuery.RegistryQuery(new RelatedFilterRegistration(relatedQueryType, _relatedFilters, _serviceLocator));
+                relatedQuery.RegistryQuery(new RelatedQueryRegistration(relatedQueryType, _relatedFilters, _serviceLocator));
             }
         }
 
@@ -58,14 +61,40 @@ namespace BrilliantCut.RelatedQuery
                 return Enumerable.Empty<IRelatedFilter<object>>();
             }
 
-            return _relatedFilters[type];
+            return _relatedFilters[type].RelatedFilters;
+        }
+
+        public bool TryGetModifiedFilterQueryFunc<TRelatedQuery>(out IModifyFilterQuery modifyFilterQuery)
+        {
+            var relatedQueryType = typeof (TRelatedQuery);
+            if (_filterQueryModifications.ContainsKey(relatedQueryType))
+            {
+                modifyFilterQuery = _filterQueryModifications[relatedQueryType];
+                return true;
+            }
+
+            modifyFilterQuery = null;
+            return false;
+        }
+
+        public bool TryGetModifiedSearchQueryFunc<TRelatedQuery>(out IModifySearchQuery modifySearchQuery)
+        {
+            var relatedQueryType = typeof(TRelatedQuery);
+            if (_filterQueryModifications.ContainsKey(relatedQueryType))
+            {
+                modifySearchQuery = _searchQueryModifications[relatedQueryType];
+                return true;
+            }
+
+            modifySearchQuery = null;
+            return false;
         }
 
         /// <summary>
         /// Gets related filters that has been registered.
         /// </summary>
         /// <returns></returns>
-        public ConcurrentDictionary<Type, List<IRelatedFilter<object>>> List()
+        public ConcurrentDictionary<Type, RelatedQueryData> List()
         {
             return _relatedFilters;
         }

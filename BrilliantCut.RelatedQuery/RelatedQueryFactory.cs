@@ -18,6 +18,8 @@ namespace BrilliantCut.RelatedQuery
     {
         private readonly IClient _client;
         private readonly RelatedFilterRegistry _relatedFilterRepository;
+        private readonly IModifyFilterQuery _defaultModifyFilterQuery;
+        private readonly IModifySearchQuery _defaultModifySearchQuery;
         private readonly IContentLoader _contentLoader;
 
         private readonly Lazy<Dictionary<Type, IEnumerable<RelatedFilterData>>> _relatedFilters;
@@ -28,11 +30,15 @@ namespace BrilliantCut.RelatedQuery
         /// <param name="client">The EPiServer Find client.</param>
         /// <param name="contentLoader">The content loader.</param>
         /// <param name="relatedFilterRepository">The repository containing the filters, which will be used when creating the related query.</param>
-        public RelatedQueryFactory(IClient client, IContentLoader contentLoader, RelatedFilterRegistry relatedFilterRepository)
+        /// <param name="defaultModifyFilterQuery">The default modify filter query.</param>
+        /// <param name="defaultModifySearchQuery">The default modify search query.</param>
+        public RelatedQueryFactory(IClient client, IContentLoader contentLoader, RelatedFilterRegistry relatedFilterRepository, IModifyFilterQuery defaultModifyFilterQuery, IModifySearchQuery defaultModifySearchQuery)
         {
             _client = client;
             _contentLoader = contentLoader;
             _relatedFilterRepository = relatedFilterRepository;
+            _defaultModifyFilterQuery = defaultModifyFilterQuery;
+            _defaultModifySearchQuery = defaultModifySearchQuery;
 
             _relatedFilters = new Lazy<Dictionary<Type, IEnumerable<RelatedFilterData>>>(GetRelatedFilters);
         }
@@ -47,7 +53,7 @@ namespace BrilliantCut.RelatedQuery
                 .List()
                 .ToDictionary(x => 
                     x.Key, 
-                    x => (IEnumerable<RelatedFilterData>)new List<RelatedFilterData>(x.Value.Select(relatedFilter => 
+                    x => (IEnumerable<RelatedFilterData>)new List<RelatedFilterData>(x.Value.RelatedFilters.Select(relatedFilter => 
                         new RelatedFilterData
                         {
                             RelatedFilter = relatedFilter,
@@ -117,7 +123,7 @@ namespace BrilliantCut.RelatedQuery
             where TQuery : class
         {
             var contentArray = content.Take(basedOnContentItems).ToArray();
-            var freeTextSearch = CreateSearchQuery<TQuery>();
+            var freeTextSearch = CreateSearchQuery<TRelatedQuery, TQuery>(contentArray);
             if (!_relatedFilters.Value.Any())
             {
                 return freeTextSearch;
@@ -136,11 +142,18 @@ namespace BrilliantCut.RelatedQuery
         /// Creates the search query, which will be the base of the search.
         /// </summary>
         /// <typeparam name="TQuery">The search type.</typeparam>
+        /// <typeparam name="TRelatedQuery">The related query type.</typeparam>
         /// <returns>Search query.</returns>
-        protected virtual IQueriedSearch<TQuery, QueryStringQuery> CreateSearchQuery<TQuery>()
+        protected virtual IQueriedSearch<TQuery, QueryStringQuery> CreateSearchQuery<TRelatedQuery, TQuery>(IEnumerable<object> content)
+            where TRelatedQuery : IRelatedQuery
         {
-            return _client.Search<TQuery>()
-                .For("");
+            IModifySearchQuery modifySearchQuery;
+            if (_relatedFilterRepository.TryGetModifiedSearchQueryFunc<TRelatedQuery>(out modifySearchQuery))
+            {
+                return modifySearchQuery.CreateSearchQuery<TQuery>(_client, content);
+            }
+
+            return _defaultModifySearchQuery.CreateSearchQuery<TQuery>(_client, content);
         }
 
         /// <summary>
@@ -208,14 +221,13 @@ namespace BrilliantCut.RelatedQuery
             where TRelatedQuery : IRelatedQuery
             where TQuery : class
         {
-            var distinctTypes = contentArray
-                .Select(x => x.GetOriginalType())
-                .Distinct();
+            IModifyFilterQuery filterQueryFunc;
+            if (_relatedFilterRepository.TryGetModifiedFilterQueryFunc<TRelatedQuery>(out filterQueryFunc))
+            {
+                return filterQueryFunc.Filter(boostQuery, contentArray);
+            }
 
-            ITypeSearch<TQuery> filterQuery = boostQuery;
-            return distinctTypes
-                .Aggregate(filterQuery, (current, type) =>
-                    current.Filter(x => !x.MatchType(type)));
+            return _defaultModifyFilterQuery.Filter(boostQuery, contentArray);
         }
 
         /// <summary>

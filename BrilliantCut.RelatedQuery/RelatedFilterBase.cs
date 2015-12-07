@@ -12,10 +12,9 @@ namespace BrilliantCut.RelatedQuery
     /// Abstract class for related filters.
     /// </summary>
     /// <typeparam name="TQuery">The query type.</typeparam>
-    /// <typeparam name="TValue">The property value type.</typeparam>
-    public abstract class RelatedFilterBase<TQuery, TValue> : IRelatedFilter<TQuery>
+    public abstract class RelatedFilterBase<TQuery> : IRelatedFilter<TQuery>
     {
-        private Func<TQuery, TValue> _compiledProperty;
+        private Func<TQuery, object> _compiledProperty;
 
         /// <summary>
         /// Creates an instance of the class.
@@ -34,7 +33,7 @@ namespace BrilliantCut.RelatedQuery
         /// <summary>
         /// The property to use in the query.
         /// </summary>
-        public Expression<Func<TQuery, TValue>> Property { get; set; }
+        public Expression<Func<TQuery, object>> Property { get; set; }
 
         /// <summary>
         /// The importance of the filter. Higher number will make the filter more important.
@@ -44,7 +43,7 @@ namespace BrilliantCut.RelatedQuery
         /// <summary>
         /// Lazy created compiled property.
         /// </summary>
-        protected Func<TQuery, TValue> CompiledProperty
+        protected Func<TQuery, object> CompiledProperty
         {
             get { return _compiledProperty ?? (_compiledProperty = Property.Compile()); }
         }
@@ -70,10 +69,10 @@ namespace BrilliantCut.RelatedQuery
         /// Gets the field name for the property
         /// </summary>
         /// <returns></returns>
-        protected virtual string GetFieldName()
+        protected virtual string GetFieldName(Type type)
         {
             var name = Property.GetFieldPath();
-            return TypeSuffix.GetSuffixedFieldName(name, typeof(TValue));
+            return TypeSuffix.GetSuffixedFieldName(name, type);
         }
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace BrilliantCut.RelatedQuery
         /// <param name="value">The value</param>
         /// <exception cref="NotSupportedException">If the type isn't supported.</exception>
         /// <returns><see cref="FieldFilterValue"/> instance for the value.</returns>
-        protected virtual FieldFilterValue GetFilterValue(TValue value)
+        protected virtual FieldFilterValue GetFilterValue(object value)
         {
             var stringValue = value as string;
             if (stringValue != null)

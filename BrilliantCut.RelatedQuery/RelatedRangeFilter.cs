@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EPiServer;
 using EPiServer.Find;
 using EPiServer.Find.Api.Querying;
 using EPiServer.Find.Api.Querying.Filters;
@@ -10,7 +11,7 @@ namespace BrilliantCut.RelatedQuery
     /// <summary>
     /// A filter, which will perform get the min and max value from the content, and make a range filtering for the property between the min and max value.
     /// </summary>
-    public class RelatedRangeFilter<TQuery, TValue> : RelatedFilterBase<TQuery, TValue>
+    public class RelatedRangeFilter<TQuery> : RelatedFilterBase<TQuery>
     {
         /// <summary>
         /// Creates an instance of the class.
@@ -29,7 +30,7 @@ namespace BrilliantCut.RelatedQuery
         public override Filter CreateRelatedFilter(IEnumerable<TQuery> content)
         {
             var values = content.Select(instance => CompiledProperty(instance)).ToArray();
-            return CreateRangeFilter(GetFieldName(), values);
+            return CreateRangeFilter(GetFieldName(values.Any() ? values.First().GetOriginalType() : typeof(object)), values);
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace BrilliantCut.RelatedQuery
         /// <param name="property">The property to use.</param>
         /// <param name="values">The values to use when creating the query.</param>
         /// <returns>The range filter.</returns>
-        protected virtual Filter CreateRangeFilter(string property, TValue[] values)
+        protected virtual Filter CreateRangeFilter(string property, object[] values)
         {
             if (!values.Any())
             {

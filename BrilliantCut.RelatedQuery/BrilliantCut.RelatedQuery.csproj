@@ -191,12 +191,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultSearchQuery.cs" />
+    <Compile Include="ExcludeContentFilterQuery.cs" />
+    <Compile Include="TypeFilterQuery.cs" />
     <Compile Include="Extensions\SearchExtensions.cs" />
+    <Compile Include="IModifySearchQuery.cs" />
+    <Compile Include="IModifyFilterQuery.cs" />
     <Compile Include="IRelatedFilter.cs" />
     <Compile Include="IRelatedQuery.cs" />
-    <Compile Include="RelatedFilterRegistration.cs" />
+    <Compile Include="RelatedQueryRegistration.cs" />
     <Compile Include="RelatedMatchFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelatedQueryData.cs" />
     <Compile Include="RelatedQueryInitializationModule.cs" />
     <Compile Include="RelatedRangeFilter.cs" />
     <Compile Include="RelatedFilterBase.cs" />

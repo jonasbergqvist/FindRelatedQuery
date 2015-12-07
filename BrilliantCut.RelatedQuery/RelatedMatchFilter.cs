@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using EPiServer;
 using EPiServer.Find;
 using EPiServer.Find.Api.Querying;
 using EPiServer.Find.Api.Querying.Filters;
@@ -11,7 +12,7 @@ namespace BrilliantCut.RelatedQuery
     /// </summary>
     /// <typeparam name="TQuery"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class RelatedMatchFilter<TQuery, TValue> : RelatedFilterBase<TQuery, TValue>
+    public class RelatedMatchFilter<TQuery> : RelatedFilterBase<TQuery>
     {
         /// <summary>
         /// Creates an instance of the class.
@@ -33,8 +34,8 @@ namespace BrilliantCut.RelatedQuery
             return content
                 .Select(instance => CompiledProperty(instance)).Distinct()
                 .Aggregate(filterBuilder, (current, valueToMatch) => 
-                    current.Or(x => 
-                        new TermFilter(GetFieldName(), GetFilterValue(valueToMatch))));
+                    current.Or(x =>
+                        new TermFilter(GetFieldName(valueToMatch.GetOriginalType()), GetFilterValue(valueToMatch))));
         }
     }
 }

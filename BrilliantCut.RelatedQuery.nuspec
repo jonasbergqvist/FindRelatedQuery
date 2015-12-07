@@ -6,8 +6,8 @@
     <title>BrilliantCut.RelatedQuery</title>
     <authors>Jonas Bergqvist</authors>
     <owners>Jonas Bergqvist</owners>
-    <licenseUrl>https://github.com/jonasbergqvist/BrilliantCut</licenseUrl>
-    <projectUrl>https://github.com/jonasbergqvist/BrilliantCut</projectUrl>
+    <licenseUrl>https://github.com/jonasbergqvist/FindRelatedQuery</licenseUrl>
+    <projectUrl>https://github.com/jonasbergqvist/FindRelatedQuery</projectUrl>
     <iconUrl>http://www.episerver.com/Framework/Styles/Images/Products/Integration.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Get related content from a search</description>
@@ -15,7 +15,7 @@
     <copyright>Copyright Jonas Berqvist 2015</copyright>
     <tags></tags>
     <dependencies>
-      <dependency id="EPiServer.Find.Cms" version="[11,12)" />
+      <dependency id="EPiServer.Find.Cms" version="[7,15)" />
     </dependencies>
   </metadata>
   <files>
