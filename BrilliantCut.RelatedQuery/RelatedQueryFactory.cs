@@ -18,7 +18,7 @@ namespace BrilliantCut.RelatedQuery
     {
         private readonly IClient _client;
         private readonly RelatedFilterRegistry _relatedFilterRepository;
-        private readonly IModifyFilterQuery _defaultModifyFilterQuery;
+        private readonly IModifyExclusionFilterQuery _defaultModifyFilterQuery;
         private readonly IModifySearchQuery _defaultModifySearchQuery;
         private readonly IContentLoader _contentLoader;
 
@@ -32,7 +32,7 @@ namespace BrilliantCut.RelatedQuery
         /// <param name="relatedFilterRepository">The repository containing the filters, which will be used when creating the related query.</param>
         /// <param name="defaultModifyFilterQuery">The default modify filter query.</param>
         /// <param name="defaultModifySearchQuery">The default modify search query.</param>
-        public RelatedQueryFactory(IClient client, IContentLoader contentLoader, RelatedFilterRegistry relatedFilterRepository, IModifyFilterQuery defaultModifyFilterQuery, IModifySearchQuery defaultModifySearchQuery)
+        public RelatedQueryFactory(IClient client, IContentLoader contentLoader, RelatedFilterRegistry relatedFilterRepository, IModifyExclusionFilterQuery defaultModifyFilterQuery, IModifySearchQuery defaultModifySearchQuery)
         {
             _client = client;
             _contentLoader = contentLoader;
@@ -57,7 +57,7 @@ namespace BrilliantCut.RelatedQuery
                         new RelatedFilterData
                         {
                             RelatedFilter = relatedFilter,
-                            ContentType = relatedFilter.GetOriginalType().GetGenericArguments().First()
+                            ContentType = relatedFilter.GetOriginalType().GetGenericArguments().FirstOrDefault() ?? relatedFilter.GetOriginalType()
                         })));
         }
 
@@ -221,7 +221,7 @@ namespace BrilliantCut.RelatedQuery
             where TRelatedQuery : IRelatedQuery
             where TQuery : class
         {
-            IModifyFilterQuery filterQueryFunc;
+            IModifyExclusionFilterQuery filterQueryFunc;
             if (_relatedFilterRepository.TryGetModifiedFilterQueryFunc<TRelatedQuery>(out filterQueryFunc))
             {
                 return filterQueryFunc.Filter(boostQuery, contentArray);

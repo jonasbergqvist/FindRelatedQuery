@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BrilliantCut.RelatedQuery;
 using EPiServer.Core;
 using EPiServer.Find;
 using EPiServer.Find.Api.Querying.Queries;
 using EPiServer.Find.Cms;
+using EPiServer.ServiceLocation;
 
-namespace BrilliantCut.RelatedQuery
+namespace BrilliantCut.Filters.RelatedQuery
 {
-    public class ExcludeContentFilterQuery : IModifyFilterQuery
+    [ServiceConfiguration(typeof(IModifyExclusionFilterQuery), Lifecycle = ServiceInstanceScope.Singleton)]
+    public class ExcludeContentFilterQuery : IModifyExclusionFilterQuery
     {
         public ITypeSearch<TQuery> Filter<TQuery>(IQueriedSearch<TQuery, CustomFiltersScoreQuery> boostQuery, IEnumerable<object> content)
         {

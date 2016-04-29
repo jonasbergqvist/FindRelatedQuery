@@ -16,7 +16,7 @@ namespace BrilliantCut.RelatedQuery
         private readonly ITypeScannerLookup _typeScannerLookup;
         private readonly IServiceLocator _serviceLocator;
         private readonly ConcurrentDictionary<Type, RelatedQueryData> _relatedFilters;
-        private readonly ConcurrentDictionary<Type, IModifyFilterQuery> _filterQueryModifications;
+        private readonly ConcurrentDictionary<Type, IModifyExclusionFilterQuery> _filterQueryModifications;
         private readonly ConcurrentDictionary<Type, IModifySearchQuery> _searchQueryModifications;
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace BrilliantCut.RelatedQuery
             _serviceLocator = serviceLocator;
             _typeScannerLookup = typeScannerLookup;
             _relatedFilters = new ConcurrentDictionary<Type, RelatedQueryData>();
-            _filterQueryModifications = new ConcurrentDictionary<Type, IModifyFilterQuery>();
+            _filterQueryModifications = new ConcurrentDictionary<Type, IModifyExclusionFilterQuery>();
             _searchQueryModifications = new ConcurrentDictionary<Type, IModifySearchQuery>();
         }
 
@@ -64,7 +64,7 @@ namespace BrilliantCut.RelatedQuery
             return _relatedFilters[type].RelatedFilters;
         }
 
-        public bool TryGetModifiedFilterQueryFunc<TRelatedQuery>(out IModifyFilterQuery modifyFilterQuery)
+        public bool TryGetModifiedFilterQueryFunc<TRelatedQuery>(out IModifyExclusionFilterQuery modifyFilterQuery)
         {
             var relatedQueryType = typeof (TRelatedQuery);
             if (_filterQueryModifications.ContainsKey(relatedQueryType))

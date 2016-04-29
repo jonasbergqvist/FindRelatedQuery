@@ -4,7 +4,7 @@ using EPiServer.Find.Api.Querying.Queries;
 
 namespace BrilliantCut.RelatedQuery
 {
-    public interface IModifyFilterQuery
+    public interface IModifyExclusionFilterQuery
     {
         ITypeSearch<TQuery> Filter<TQuery>(IQueriedSearch<TQuery, CustomFiltersScoreQuery> boostQuery, IEnumerable<object> content);
     }

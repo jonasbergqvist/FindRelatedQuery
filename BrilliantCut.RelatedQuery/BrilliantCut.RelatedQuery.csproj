@@ -191,29 +191,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultSearchQuery.cs" />
-    <Compile Include="ExcludeContentFilterQuery.cs" />
-    <Compile Include="TypeFilterQuery.cs" />
+    <Compile Include="Filters\DefaultSearchQuery.cs" />
+    <Compile Include="Filters\ExcludeContentFilterQuery.cs" />
+    <Compile Include="Filters\ExcludeTypeFilterQuery.cs" />
     <Compile Include="Extensions\SearchExtensions.cs" />
     <Compile Include="IModifySearchQuery.cs" />
-    <Compile Include="IModifyFilterQuery.cs" />
+    <Compile Include="IModifyExclusionFilterQuery.cs" />
     <Compile Include="IRelatedFilter.cs" />
     <Compile Include="IRelatedQuery.cs" />
     <Compile Include="RelatedQueryRegistration.cs" />
-    <Compile Include="RelatedMatchFilter.cs" />
+    <Compile Include="Filters\RelatedMatchFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelatedQueryData.cs" />
     <Compile Include="RelatedQueryInitializationModule.cs" />
-    <Compile Include="RelatedRangeFilter.cs" />
+    <Compile Include="Filters\RelatedRangeFilter.cs" />
     <Compile Include="RelatedFilterBase.cs" />
     <Compile Include="RelatedFilterData.cs" />
     <Compile Include="RelatedFilterRegistry.cs" />
     <Compile Include="RelatedQueryFactory.cs" />
+    <Compile Include="RelatedSearchResults.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

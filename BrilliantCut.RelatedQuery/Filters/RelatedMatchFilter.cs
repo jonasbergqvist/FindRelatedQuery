@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BrilliantCut.RelatedQuery;
 using EPiServer;
 using EPiServer.Find;
 using EPiServer.Find.Api.Querying;
 using EPiServer.Find.Api.Querying.Filters;
 
-namespace BrilliantCut.RelatedQuery
+namespace BrilliantCut.Filters.RelatedQuery
 {
     /// <summary>
     /// A filter, which will match content against the property for an exact match.

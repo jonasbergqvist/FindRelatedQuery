@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BrilliantCut.RelatedQuery;
 using EPiServer;
 using EPiServer.Find;
 using EPiServer.Find.Api.Querying;
 using EPiServer.Find.Api.Querying.Filters;
 
-namespace BrilliantCut.RelatedQuery
+namespace BrilliantCut.Filters.RelatedQuery
 {
     /// <summary>
     /// A filter, which will perform get the min and max value from the content, and make a range filtering for the property between the min and max value.

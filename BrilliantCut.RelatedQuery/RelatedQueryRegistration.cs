@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using BrilliantCut.Filters.RelatedQuery;
 using EPiServer.ServiceLocation;
 
 namespace BrilliantCut.RelatedQuery
@@ -13,8 +14,8 @@ namespace BrilliantCut.RelatedQuery
         {
         }
 
-        public ModifiedFilterRegistration ModifyFilterQuery<TModifyFilterQiery>()
-            where TModifyFilterQiery : IModifyFilterQuery
+        public ModifiedFilterRegistration ModifyExclusionFilterQuery<TModifyFilterQiery>()
+            where TModifyFilterQiery : IModifyExclusionFilterQuery
         {
             InternalModifyFilterQuery<TModifyFilterQiery>();
 
@@ -37,8 +38,8 @@ namespace BrilliantCut.RelatedQuery
         {
         }
 
-        public RelatedFilterRegistration ModifyFilterQuery<TModifyFilterQiery>()
-            where TModifyFilterQiery : IModifyFilterQuery
+        public RelatedFilterRegistration ModifyExclusionFilterQuery<TModifyFilterQiery>()
+            where TModifyFilterQiery : IModifyExclusionFilterQuery
         {
             InternalModifyFilterQuery<TModifyFilterQiery>();
 
@@ -80,9 +81,15 @@ namespace BrilliantCut.RelatedQuery
         /// <summary>
         /// Adds a filter to the registry.
         /// </summary>
-        /// <param name="filter">The filter to add.</param>
         /// <returns></returns>
-        public RelatedFilterRegistration AddFilter(IRelatedFilter<object> filter)
+        public RelatedFilterRegistration AddFilter<T>()
+            where T : IRelatedFilter<object>
+        {
+            var filter = ServiceLocator.GetInstance<T>();
+            return AddFilter(filter);
+        }
+
+        private RelatedFilterRegistration AddFilter(IRelatedFilter<object> filter)
         {
             RelatedFilters.AddOrUpdate(FilterType,
                 key => new RelatedQueryData
@@ -123,7 +130,7 @@ namespace BrilliantCut.RelatedQuery
         }
 
         protected void InternalModifyFilterQuery<TModifyFilterQiery>()
-            where TModifyFilterQiery : IModifyFilterQuery
+            where TModifyFilterQiery : IModifyExclusionFilterQuery
         {
             var modifyFilterQuery = ServiceLocator.GetInstance<TModifyFilterQiery>();
 

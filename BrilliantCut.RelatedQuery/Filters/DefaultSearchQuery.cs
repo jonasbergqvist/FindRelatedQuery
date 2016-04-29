@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using BrilliantCut.RelatedQuery;
 using EPiServer.Find;
 using EPiServer.Find.Api.Querying.Queries;
 using EPiServer.ServiceLocation;
 
-namespace BrilliantCut.RelatedQuery
+namespace BrilliantCut.Filters.RelatedQuery
 {
     [ServiceConfiguration(typeof(IModifySearchQuery), Lifecycle = ServiceInstanceScope.Singleton)]
     public class DefaultSearchQuery : IModifySearchQuery
