@@ -1,0 +1,64 @@
+{
+  "StandardPage": [
+    {
+      "Name": "Reporting Made Simple",
+      "TeaserText": "No one likes writing reports, but everyone wants them. ",
+      "MainBody": "<p>Bajen</p>"
+    },
+    {
+      "Name": "Collaboration Made Simple",
+      "TeaserText": null,
+      "MainBody": "<p>The course gives an overview on how to use Alloy's products in your daily work.</p>\n<p>You will learn how to structure the project and how to implement  Alloy Track to suit your project method. After the course, you will be  able to manage the entire project process online.</p>\n<p>Trainer:</p>\n<p><strong>Monica Speedman</strong><br />Alloy Development</p>"
+    },
+    {
+      "Name": "Risk Management",
+      "TeaserText": "The theory behind risk management calculations.  ",
+      "MainBody": "<p>On completion of this seminar, you will be prepared to measure, assess and manage risk in your projects using Alloy Plan.</p>\n<hr />\n<p><img style=\"float: left;\" src=\"/link/b62a7ea572f54b4ebc5f670d99aad54b.png\" alt=\"Patrick Jane, Risk Management Specialist\" />Key Note:</p>\n<h2>Patrick Jones</h2>\n<p>Risk Management Specialist</p>\n<p>Mr Jones has twenty years of experience in risk management. He has  been the leader of numerous large-scale, high-risk projects in various  industries.</p>\n<p>Don't miss this opportunity to learn from Patrick's expansive knowledge and wealth of experience.</p>"
+    },
+    {
+      "Name": "Management",
+      "TeaserText": null,
+      "MainBody": null
+    },
+    {
+      "Name": "Contact us",
+      "TeaserText": "Are you interested in our products?",
+      "MainBody": "<p>Please contact Todd Slayton, our VP Sales at: +46 8 123 457.</p>"
+    },
+    {
+      "Name": "Become a reseller",
+      "TeaserText": "We are always looking to cooperate with new resellers. ",
+      "MainBody": "<p>Please contact Todd Slayton, our VP Sales at: +46 8 123 457.</p>"
+    },
+    {
+      "Name": "Whitepaper",
+      "TeaserText": "Explore the opportunities that exist for keeping your projects on track.",
+      "MainBody": "<p><img style=\"float: left;\" src=\"/link/4962e7e183e041eca8f5ac920519bd84.png\" alt=\"Download Whitepaper Alloy Track\" width=\"300\" height=\"205\" />Learn from the experiences of our many customers who have contributed to this whitepaper.</p>\n<p>Projects have a natural lifecycle with well-defined stages. Progress  monitoring is a critical part of making sure that your project is  on-track and capable of delivering in the end.</p>\n<p>From start-up meetings to final sign-off, we have the solutions for  today’s market-driven needs. Leverage your assets to the fullest through  the combination of Alloy Plan, Alloy Meet and Alloy Track.</p>"
+    },
+    {
+      "Name": "News & Events",
+      "TeaserText": null,
+      "MainBody": null
+    },
+    {
+      "Name": "Find a reseller",
+      "TeaserText": "Buy the Alloy Product suite now.",
+      "MainBody": "<p><img src=\"/link/5161752e369242908869379bf5b3883f.png\" alt=\"Our worldwide partner network\" width=\"770\" height=\"429\" /></p>"
+    },
+    {
+      "Name": "Bajen",
+      "TeaserText": null,
+      "MainBody": null
+    },
+    {
+      "Name": "ajk",
+      "TeaserText": null,
+      "MainBody": null
+    },
+    {
+      "Name": "About us",
+      "TeaserText": null,
+      "MainBody": null
+    }
+  ]
+}
